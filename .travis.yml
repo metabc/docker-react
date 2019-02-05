@@ -3,7 +3,20 @@ services:
   - docker
 
 before_install:
-    - docker build -t metabc/docker-react -f Dockerfile.dev .
+  - docker build -t metabc/docker-react -f Dockerfile.dev .
 
 script:
   - docker run metabc/docker-react npm run test -- --coverage
+
+deploy:
+  provider: elasticbeanstalk
+  region: "eu-north-1"
+  app: "Docker"
+  env: "Docker-env"
+  bucket_name: "elasticbeanstalk-eu-north-1-923345324210"
+  bucket_path: "Docker"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "AWS_SECRET_KEY"
